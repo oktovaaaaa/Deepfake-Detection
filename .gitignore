@@ -1,0 +1,25 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caches and environments
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# Trained models & weights
+models/*.pt
+models/*.bin
+models/*.safetensors
+*.pt
+
+# Dataset files yang berukuran besar (> 100 MB tidak boleh masuk GitHub)
+*.zip
+data/raw/kaggle_political/*.zip
+data/raw/kaggle_political/RAW/
+data/raw/kaggle_political/Summarized/
+data/raw/kaggle_political/Cleaned/*.xlsx
+data/processed/dataset_hoax_clean.csv
+data/processed/train.csv

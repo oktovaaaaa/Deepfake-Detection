@@ -1,0 +1,57 @@
+services:
+  # WAHA: WhatsApp HTTP API
+  waha:
+    image: devlikeapro/waha
+    platform: linux/amd64
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    volumes:
+      - waha-sessions:/app/.sessions
+    environment:
+      - WHATSAPP_DEFAULT_ENGINE=WEBJS
+      - WAHA_API_KEY=${WAHA_API_KEY}
+      - WAHA_DASHBOARD_USERNAME=admin
+      - WAHA_DASHBOARD_PASSWORD=${WAHA_DASHBOARD_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/ping || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # FastAPI Backend (BART + BERT + NER)
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/models:ro
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+
+  # Bot Server (Node.js webhook handler)
+  bot:
+    build: ./bot
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - WAHA_API_URL=http://waha:3000
+      - BART_API_URL=http://backend:8000
+      - BERT_API_URL=http://backend:8000
+    depends_on:
+      waha:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+
+volumes:
+  waha-sessions:
