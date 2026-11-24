@@ -1,0 +1,25 @@
+Data mentah (berlabel): 86086
+Dibuang teks < 5 kata: 3092
+Dibuang teks bukan bahasa Indonesia: 966
+Dibuang duplikat dengan label bertentangan: 228
+Dibuang duplikat: 5666
+
+TOTAL BERSIH: 76134  (hoaks=1: 37044, valid=0: 39090)
+Split: train=60914, val=7616, test=7604
+
+Per sumber:
+label                     0      1
+source                            
+azis_antaranews        4066      0
+azis_detik             3575      0
+azis_kompas            4498      0
+azis_turnbackhoax         0  11606
+hoaxnews_irfanqs        147    108
+idnhoaxcorpus_twitter   633   2712
+komdigi_judul             0   4068
+linkgish_cnn           7226      0
+linkgish_kompas        3828      0
+linkgish_tempo         6489      0
+linkgish_turnbackhoax     0   8457
+political_hoax_local   8030   6801
+satria_data_2020        598   3292
