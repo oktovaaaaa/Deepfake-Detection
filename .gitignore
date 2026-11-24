@@ -31,6 +31,7 @@ data/processed/train.csv
 Dataset Certan Fake News/*
 !Dataset Certan Fake News/scripts/
 !Dataset Certan Fake News/training_deteksi_hoaks.ipynb
+!Dataset Certan Fake News/training_deteksi_hoaks.py
 !Dataset Certan Fake News/merged/
 Dataset Certan Fake News/merged/dataset_gabungan.csv
 
