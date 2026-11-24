@@ -23,11 +23,11 @@ os.makedirs(OUT_DIR, exist_ok=True)
 
 MODEL_NAME = "indobenchmark/indobert-base-p1"
 MAX_LEN = 256
-EPOCHS = 3
+EPOCHS = 5
 LR_BERT = 2e-5
 LR_HEAD = 1e-3
 WARMUP = 0.1
-PATIENCE = 1
+PATIENCE = 2
 SEED = 42
 SKIP_IF_TRAINED = True
 
