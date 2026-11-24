@@ -1,66 +1,63 @@
-# AI untuk Deteksi Misinformasi dan Berita Hoaks Berbahasa Indonesia
+# Deteksi Berita Hoaks Berbahasa Indonesia
 
-Proyek Mata Kuliah: **AI untuk Deteksi Misinformasi dan Deepfake**  
-Dosen Pengampu: **Pak RCH**
+Proyek mata kuliah **AI untuk Deteksi Misinformasi dan Deepfake**.
+Klasifikasi teks berita/unggahan media sosial berbahasa Indonesia menjadi **hoaks (1)** atau **valid (0)**,
+dengan membandingkan model klasik, IndoBERT, dan model hybrid **IndoBERT + BiLSTM**.
 
-Arsitektur Model: **Hybrid IndoBERT + Bi-directional LSTM with Attention Mechanism**
+## Struktur
 
----
+```
+├── training/
+│   ├── gabung_dataset.py            # menggabungkan & membersihkan dataset mentah -> merged/
+│   ├── training_deteksi_hoaks.py    # training & evaluasi semua model (Python)
+│   └── training_deteksi_hoaks.ipynb # isi sama, versi notebook
+├── Dataset Certan Fake News/
+│   └── merged/                      # train.csv, val.csv, test.csv, ringkasan.txt
+└── requirements.txt
+```
 
-## 📌 Ringkasan Progres 1
-- **Topik:** Deteksi Misinformasi & Berita Palsu Berbahasa Indonesia.
-- **Dataset:** 19.630 berita seimbang (10.000 Hoaks dari TurnBackHoax/CekFakta dan 9.630 Berita Valid dari CNN Indonesia).
-- **Pembagian Data:** 80% Train (15.704 data), 10% Val (1.963 data), 10% Test (1.963 data).
-- **Model:** `IndoBERT` sebagai *feature extractor*, `BiLSTM` untuk pemodelan sekuensial, dan `Bahdanau Attention` untuk menyoroti frasa provokatif.
-- **Dokumen Progres 1:** Tersedia lengkap di [`docs/LAPORAN_PROGRESS_1.md`](docs/LAPORAN_PROGRESS_1.md).
+## Dataset
 
----
+76.134 data hasil gabungan 8 dataset publik hoaks Indonesia
+(TurnBackHoax, Komdigi, CNN/Kompas/Tempo/Antara/Detik, IDNHoaxCorpus, Indonesia Political Hoax, dll.).
 
-## 🚀 Panduan Memulai Cepat (Quickstart)
+| Split | Jumlah | Valid (0) | Hoaks (1) |
+|---|---|---|---|
+| Train (80%) | 60.914 | 31.276 | 29.638 |
+| Validation (10%) | 7.616 | 3.911 | 3.705 |
+| Test (10%) | 7.604 | 3.903 | 3.701 |
 
-### 1. Instalasi Dependensi
+Kolom: `text`, `label`, `source`. Split terstratifikasi per label dan sumber.
+Rincian pembersihan dan jumlah per sumber ada di `Dataset Certan Fake News/merged/ringkasan.txt`.
+
+Data mentah tidak disimpan di repo karena ukurannya besar. Untuk membuat ulang `merged/`,
+letakkan data mentah di `Dataset Certan Fake News/` lalu jalankan `python training/gabung_dataset.py`.
+
+## Model
+
+| Model | Keterangan |
+|---|---|
+| Baseline panjang teks | Hanya jumlah kata, untuk mengukur bias dataset |
+| TF-IDF + Logistic Regression / SVM | Baseline klasik |
+| IndoBERT | `indobenchmark/indobert-base-p1`, fine-tuning |
+| IndoBERT + BiLSTM | Model usulan (hybrid) |
+
+Evaluasi pada data test: accuracy, precision, recall, F1, ROC-AUC, confusion matrix, dan akurasi per sumber.
+
+## Menjalankan
+
 ```bash
 pip install -r requirements.txt
+python training/training_deteksi_hoaks.py
 ```
 
-### 2. Preprocessing Data (Opsional jika ingin rebuild ulang dataset)
+Disarankan memakai GPU. Hasil (tabel perbandingan, grafik, checkpoint model) tersimpan di `training/hasil_training/`.
+
+**Server (berjalan di background):**
 ```bash
-python src/preprocess.py
-```
-Data hasil pembersihan akan otomatis tersimpan di folder `data/processed/` (`train.csv`, `val.csv`, `test.csv`).
-
-### 3. Menjalankan Training Model
-Untuk melatih model Hybrid (disarankan menggunakan GPU/Google Colab):
-```bash
-python src/train.py --epochs 3 --batch_size 16 --lr 2e-5
+tmux new -s hoaks
+python training/training_deteksi_hoaks.py 2>&1 | tee log_training.txt
 ```
 
-Untuk mode uji coba cepat (*debugging subset kecil*):
-```bash
-python src/train.py --debug --epochs 1 --batch_size 8
-```
-
-### 4. Menggunakan Google Colab
-Buka notebook di [`notebooks/01_eda_and_hybrid_model.ipynb`](notebooks/01_eda_and_hybrid_model.ipynb), lalu upload ke Google Colab dengan Runtime GPU (T4) untuk pelatihan yang lebih cepat.
-
----
-
-## 📂 Struktur Direktori
-```
-DeepFake Detection/
-├── data/
-│   ├── raw/                  # Data mentah
-│   └── processed/            # train.csv, val.csv, test.csv
-├── docs/
-│   └── LAPORAN_PROGRESS_1.md # Dokumen resmi Progres 1
-├── notebooks/
-│   └── 01_eda_and_hybrid_model.ipynb
-├── src/
-│   ├── preprocess.py
-│   ├── dataset.py
-│   ├── model.py
-│   └── train.py
-├── requirements.txt
-└── README.md
-```
-
+**Google Colab:** upload folder `merged` ke `MyDrive/certan/merged`, buka `training/training_deteksi_hoaks.ipynb`,
+pilih runtime GPU, lalu *Run all*.
