@@ -17,7 +17,7 @@ if IN_COLAB:
     OUT_DIR = "/content/drive/MyDrive/certan/hasil_training"
 else:
     BASE = os.path.dirname(os.path.abspath(__file__)) if "__file__" in globals() else os.getcwd()
-    DATA_DIR = os.path.join(BASE, "merged")
+    DATA_DIR = os.path.join(BASE, "..", "Dataset Certan Fake News", "merged")
     OUT_DIR = os.path.join(BASE, "hasil_training")
 os.makedirs(OUT_DIR, exist_ok=True)
 

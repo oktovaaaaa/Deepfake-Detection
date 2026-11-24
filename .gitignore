@@ -25,13 +25,10 @@ data/processed/dataset_hoax_clean.csv
 data/processed/train.csv
 
 # ---------------------------------------------------------------- Progress 3
-# Folder "Dataset Certan Fake News": hanya kode & data split yang di-push.
+# Folder "Dataset Certan Fake News": hanya data split (merged) yang di-push.
 # Data mentah (downloads, archive, dll.) berukuran besar -> tidak di-push,
-# bisa diunduh ulang lalu digabung lagi dengan scripts/gabung_dataset.py
+# bisa diunduh ulang lalu digabung lagi dengan training/gabung_dataset.py
 Dataset Certan Fake News/*
-!Dataset Certan Fake News/scripts/
-!Dataset Certan Fake News/training_deteksi_hoaks.ipynb
-!Dataset Certan Fake News/training_deteksi_hoaks.py
 !Dataset Certan Fake News/merged/
 Dataset Certan Fake News/merged/dataset_gabungan.csv
 

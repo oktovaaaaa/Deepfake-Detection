@@ -2,19 +2,19 @@
 Menggabungkan semua dataset berita hoaks berbahasa Indonesia menjadi satu dataset bersih.
 
 Label akhir:  1 = hoaks,  0 = valid
-Output (folder ../merged):
+Output (folder "Dataset Certan Fake News/merged"):
   - dataset_gabungan.csv    : semua data bersih (text, label, source)
   - train.csv / val.csv / test.csv : split 80/10/10 terstratifikasi (label x source)
   - ringkasan.txt           : statistik per sumber dan per label
 
-Jalankan dari mana saja:  python scripts/gabung_dataset.py
+Jalankan dari mana saja:  python training/gabung_dataset.py
 """
 import re
 from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent / "Dataset Certan Fake News"
 DL = ROOT / "downloads"
 OUT = ROOT / "merged"
 SEED = 42
